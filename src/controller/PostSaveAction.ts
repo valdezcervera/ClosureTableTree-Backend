@@ -6,7 +6,7 @@ import {Post} from "../entity/Post";
  * Saves given post.
  */
 export async function postSaveAction(context: Context) {
-
+    console.log('postSaveAction fired!')
     // get a post repository to perform operations with post
     const postRepository = getManager().getRepository(Post);
 

@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable} from "typeorm";
-import {Category} from "./Category";
+import {Category} from "./closuretable";
 
 @Entity()
 export class Post {
@@ -18,5 +18,4 @@ export class Post {
     })
     @JoinTable()
     categories: Category[];
-
 }
