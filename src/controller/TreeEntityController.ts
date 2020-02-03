@@ -1,5 +1,5 @@
 import {Context} from "koa";
-import {getManager, Connection} from "typeorm";
+import {getManager} from "typeorm";
 import {Category} from "../entity/closuretable";
 
 export async function treeSaveNode(context: Context) {
@@ -94,4 +94,18 @@ export async function countParents(context: Context) {
     const childCategory: Category = context.request.body
     const parentCount = await repository.countAncestors(childCategory)
     context.body = `${parentCount} parents found`    
+}
+
+// Implements --> DELETE FROM category_closure WHERE id_descendant = 8;
+export async function deletechildrenQueryBuilder (context: Context) {
+    const manager = getManager()
+    const repository = await manager.getTreeRepository(Category)
+    const node: Category = context.request.body
+    const operation = await repository
+        .createDescendantsQueryBuilder('category', 'closuretable', node) // Alias is what you are selecting --> category.
+        .where(`id_descendant = ${node.id}`)
+        .delete()
+        .from('category_closure')
+        .execute()
+    context.body = operation
 }

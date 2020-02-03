@@ -1,7 +1,3 @@
-import { postGetAllAction } from "./controller/PostGetAllAction";
-import { postGetByIdAction } from "./controller/PostGetByIdAction";
-import { postSaveAction } from "./controller/PostSaveAction";
-// ==============================================================//
 import {
     treeSaveNode,
     getTrees,
@@ -14,34 +10,20 @@ import {
     getParentTree,
     parentQueryBuilder,
     countParents,
+    deletechildrenQueryBuilder,
 } from "./controller/TreeEntityController";
 
-/**
- * All application routes.
- */
 export const AppRoutes = [
-    {
-        path: "/posts",
-        method: "get",
-        action: postGetAllAction
-    },
-    {
-        path: "/posts/:id",
-        method: "get",
-        action: postGetByIdAction
-    },
-    {
-        path: "/posts",
-        method: "post",
-        action: postSaveAction
-    },
-    //=============================================================
-//===========TREE============
+//==========================CLOSURE_TREE=============================
+
+//=========NODE OPERATIONS=======
+    //======Create NODE==========================
     {
         path: "/categories",
         method: "post",
         action: treeSaveNode
     },
+    //========Get Whole Tree=====================
     {
         path: "/categories",
         method: "get",
@@ -65,7 +47,7 @@ export const AppRoutes = [
         method: "get",
         action: getChildrenTree
     },
-    //======Return Children Query Builder========= TODO: implement dinamic query in controller
+    //======Return Children Query Builder========= TODO: posible custom query on children
     {
         path: "/query/children",
         method: "get",
@@ -90,7 +72,7 @@ export const AppRoutes = [
         method: "get",
         action: getParentTree
     },
-    //======Parent Query builder ============= TODO: implement dinamic query in controller
+    //======Parent Query builder ============= TODO: posible custom query on parent
     {
         path: "/query/parent",
         method: "get",
@@ -102,10 +84,11 @@ export const AppRoutes = [
         method: "get",
         action: countParents
     },
+// ========CUSTOM NODE OPERATIONS================ TODO: Move subTree
+    // ======Delete Node ========================
+    {
+        path: "/node/delete",
+        method: "get",
+        action: deletechildrenQueryBuilder
+    }
 ];
-
-// {
-//     path: ,
-//     method: ,
-//     action:
-// }
