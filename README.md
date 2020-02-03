@@ -1,8 +1,8 @@
 # Example how to use Koa and TypeORM with TypeScript
 
 ### NOTE:
-This example has been modified from the original repo to use the closure table pattern, this pattern is used for 
-data represented as a tree, and it enables blazing fast reads and writes.  
+This example has been modified from the original repo to use the closure table pattern, this pattern is used for representing
+data as a tree, with the added benefit of blazing fast reads and writes.  
 Repo forked from:  
 https://github.com/typeorm/typescript-koa-example.git  
 by Umed Khudoiberdiev
