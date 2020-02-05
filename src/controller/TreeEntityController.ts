@@ -1,6 +1,7 @@
 import {Context} from "koa";
-import {getManager} from "typeorm";
+import {getManager, EntityMetadata, Connection} from "typeorm";
 import {Category} from "../entity/closuretable";
+import {QueryRepository} from './Delete'
 
 export async function treeSaveNode(context: Context) {
     const manager = getManager()
@@ -97,7 +98,7 @@ export async function countParents(context: Context) {
 }
 
 // Implements --> DELETE FROM category_closure WHERE id_descendant = 8;
-export async function deletechildrenQueryBuilder (context: Context) {
+export async function deleteChildrenQueryBuilder (context: Context) {
     const manager = getManager()
     const repository = await manager.getTreeRepository(Category)
     const node: Category = context.request.body
@@ -107,5 +108,28 @@ export async function deletechildrenQueryBuilder (context: Context) {
         .delete()
         .from('category_closure')
         .execute()
+
     context.body = operation
+}
+// method 1 (first implementation from docs)
+export async function deleteNodeQueryBuilder (context: Context) {
+    const manager = getManager()
+    const repository = await manager.getTreeRepository(Category)
+    const node: Category = context.request.body
+    const operation = await repository
+        .createQueryBuilder('category') 
+        .where(`id_ancestor = ${node.id}`)
+        .delete()
+        .from('category_closure')
+        .execute()
+    context.body = operation
+}
+// method 2
+// instance of QueryRepository, implementation by Shane Husson https://github.com/shusson
+export async function deleteNode (context: Context) {
+    const instance = await new QueryRepository()
+    const node: Category = context.request.body
+    const nodeId = node.id.toString()
+    const result = await instance.delete(nodeId)
+    context.body = result
 }

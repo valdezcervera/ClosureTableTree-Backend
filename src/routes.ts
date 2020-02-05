@@ -10,7 +10,9 @@ import {
     getParentTree,
     parentQueryBuilder,
     countParents,
-    deletechildrenQueryBuilder,
+    deleteChildrenQueryBuilder,
+    deleteNodeQueryBuilder,
+    deleteNode
 } from "./controller/TreeEntityController";
 
 export const AppRoutes = [
@@ -85,10 +87,16 @@ export const AppRoutes = [
         action: countParents
     },
 // ========CUSTOM NODE OPERATIONS================ TODO: Move subTree
-    // ======Delete Node ========================
+    // ======Delete Children ========================
     {
-        path: "/node/delete",
+        path: "/node/delete/children",
         method: "get",
-        action: deletechildrenQueryBuilder
+        action: deleteChildrenQueryBuilder
+    },
+    // ======Delete Node ============================
+    {
+        path: "/node/delete/node",
+        method: "get",
+        action: deleteNode
     }
 ];

@@ -3,6 +3,7 @@ import {createConnection} from "typeorm";
 import * as Koa from "koa";
 import * as Router from "koa-router";
 import * as bodyParser from "koa-bodyparser";
+import * as cors from '@koa/cors';
 import {AppRoutes} from "./routes";
 
 // create connection with database (lazy)
@@ -17,6 +18,7 @@ createConnection().then(async connection => {
     AppRoutes.forEach(route => router[route.method](route.path, route.action));
 
     // run app
+    app.use(cors());
     app.use(bodyParser());
     app.use(router.routes());
     app.use(router.allowedMethods());
