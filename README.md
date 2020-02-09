@@ -17,7 +17,8 @@ the postgreSQL container!).
 5. run `npm start` (the script compiles ts files and runs nodemon)
 6. open `http://localhost:3000/categories` and you'll get an empty array.
 7. use curl, postman or other tools to send http requests to test your typeorm-based API
-8. to create a new node, the endpoint post:/categories recieves a JSON with the following
+8. create a root node (see structure below)
+9. to create a new node, the endpoint post:/categories recieves a JSON(applicatoin/json) with the following
 structure:  
             {name: string} creates a root node  
             {name: string, parent{id: int}} creates children from parent, 
@@ -67,8 +68,8 @@ count's how many parents go from child node
 to root.
 Please read node on count/children!
 
-/node/delete  
-get  
+/node/delete/:id  
+delete  
 remove node. It only aplies to leaves.
 
 ### Custom controllers

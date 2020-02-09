@@ -1,15 +1,15 @@
-import "reflect-metadata";
-import {createConnection} from "typeorm";
-import * as Koa from "koa";
-import * as Router from "koa-router";
-import * as bodyParser from "koa-bodyparser";
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import * as Koa from 'koa';
+import * as Router from 'koa-router';
+import * as bodyParser from 'koa-bodyparser';
 import * as cors from '@koa/cors';
-import {AppRoutes} from "./routes";
+import { AppRoutes } from './routes';
 
 // create connection with database (lazy)
 createConnection().then(async connection => {
 
-    const port = 3000
+    const port = 3000; // TODO: get config from env.
     // create koa app
     const app = new Koa();
     const router = new Router();
@@ -24,6 +24,8 @@ createConnection().then(async connection => {
     app.use(router.allowedMethods());
     app.listen(port);
 
+    // tslint:disable-next-line: no-console
     console.log(`Koa application is up and running on port ${port}`);
 
-}).catch(error => console.log("TypeORM connection error: ", error));
+// tslint:disable-next-line: no-console
+}).catch(error => console.log('TypeORM connection error: ', error));

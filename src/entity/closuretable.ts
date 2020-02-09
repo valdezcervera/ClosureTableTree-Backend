@@ -1,7 +1,7 @@
-import {Entity, Tree, Column, PrimaryGeneratedColumn, TreeChildren, TreeParent} from "typeorm";
+import { Entity, Tree, Column, PrimaryGeneratedColumn, TreeChildren, TreeParent } from 'typeorm';
 
 @Entity()
-@Tree("closure-table")
+@Tree('closure-table')
 export class Category {
 
     @PrimaryGeneratedColumn()
