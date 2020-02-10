@@ -2,7 +2,7 @@ import { getManager, EntityManager, EntityRepository, TreeRepository, getReposit
 import { Category } from '../../entity/closuretable';
 
 @EntityRepository(Category)
-export class QueryRepository extends TreeRepository<Category> {
+export class QueryBuilder extends TreeRepository<Category> {
 
     async delete(id: string): Promise<any> {
         const result = await getManager().transaction(async (tem: EntityManager) => {
@@ -49,5 +49,28 @@ export class QueryRepository extends TreeRepository<Category> {
         });
 
         return { ids_removed: result };
+    }
+    async deleteChildren (id) {
+        const operation = await getManager().getTreeRepository(Category)
+            .createDescendantsQueryBuilder('category', 'closuretable', id) // Alias is what you are selecting --> category.
+            .where(`id_descendant = ${id}`)
+            .delete()
+            .from('category_closure')
+            .execute();
+        return operation;
+    }
+    async parentQueryBuilder (childNode) {
+        const operation = await getManager().getTreeRepository(Category)
+            .createAncestorsQueryBuilder('category', 'closuretable', childNode)
+            .andWhere('category.id >= 5') // dummy condition: return all parents >= id:5
+            .getMany();
+        return operation;
+    }
+    async childrenQueryBuilder(parentNode) {
+        const operation = await getManager().getTreeRepository(Category)
+            .createDescendantsQueryBuilder('category', 'closuretable', parentNode)
+            .andWhere('category.id >= 5') // dummy condition
+            .getMany();
+        return operation;
     }
 }

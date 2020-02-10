@@ -18,13 +18,11 @@ export async function getItemById(context: Context) {
     context.body = item;
 }
 export async function getAllListItems(context: Context) {
-
     const repository = getManager().getRepository(List);
     const itemList = await repository.find();
     context.body = itemList;
 }
 export async function removeListItem(context: Context) {
-
     const repository = getManager().getRepository(List);
     const id = context.params.id;
     const item = await repository.findOne(id);

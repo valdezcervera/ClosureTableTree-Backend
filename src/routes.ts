@@ -4,16 +4,21 @@ import {
     getRoot,
     getChildren,
     getChildrenTree,
-    childrenQueryBuilder,
+    childrenQuery,
     countChildren,
     getParent,
     getParentTree,
-    parentQueryBuilder,
+    parentQuery,
     countParents,
-    deleteChildrenQueryBuilder,
+    deleteChildren,
     deleteNode
 } from './controller/TreeEntityController';
-import { postListItem, getItemById, getAllListItems, removeListItem } from './controller/ListEntityController';
+import {
+    postListItem,
+    getItemById,
+    getAllListItems,
+    removeListItem
+} from './controller/ListEntityController';
 
 export const AppRoutes = [
 // ==========================ITEM_LIST=============================
@@ -39,7 +44,6 @@ export const AppRoutes = [
         action: removeListItem
     },
 // ==========================CLOSURE_TREE=============================
-
 // =========NODE OPERATIONS=======
     // ======Create NODE==========================
     {
@@ -75,7 +79,7 @@ export const AppRoutes = [
     {
         path: '/query/children',
         method: 'get',
-        action: childrenQueryBuilder
+        action: childrenQuery
     },
     // ======Count Children =======================
     {
@@ -100,7 +104,7 @@ export const AppRoutes = [
     {
         path: '/query/parent',
         method: 'get',
-        action: parentQueryBuilder
+        action: parentQuery
     },
     // ======Count Parents ======================
     {
@@ -113,7 +117,7 @@ export const AppRoutes = [
     {
         path: '/node/delete/children/:id',
         method: 'del',
-        action: deleteChildrenQueryBuilder
+        action: deleteChildren
     },
     // ======Delete Node ============================
     {

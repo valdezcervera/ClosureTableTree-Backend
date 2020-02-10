@@ -1,5 +1,9 @@
-
-import { Entity, PrimaryGeneratedColumn, Column, TreeParent } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    TreeParent
+} from 'typeorm';
 
 @Entity()
 export class List {

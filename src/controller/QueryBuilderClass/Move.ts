@@ -1,7 +1,7 @@
 /**
  * UNDER DEVELOPMENT
- * this code will eventually  be merged into
- * a single QueryRepository class
+ * this code will eventually  be merged
+ * with the QueryBuilder class
  */
 
 import { getManager, EntityManager, EntityRepository, TreeRepository, getRepository } from 'typeorm';

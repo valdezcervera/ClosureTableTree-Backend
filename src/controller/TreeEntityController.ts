@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import { getManager } from 'typeorm';
 import { Category } from '../entity/closuretable';
-import { QueryRepository } from './QueryBuilderClass/Delete';
+import { QueryBuilder } from './QueryBuilderClass/QueryBuilder';
 
 export async function treeSaveNode(context: Context) {
     const manager = getManager();
@@ -43,14 +43,10 @@ export async function getChildrenTree(context: Context) {
     context.body = childrenTree;
 }
 
-export async function childrenQueryBuilder(context: Context) {
-    const manager = getManager();
-    const repository = await manager.getTreeRepository(Category);
+export async function childrenQuery(context: Context) {
+    const instance = await new QueryBuilder();
     const parentCategory: Category = context.request.body;
-    const children = await repository
-        .createDescendantsQueryBuilder('category', 'closuretable', parentCategory)
-        .andWhere('category.id >= 5') // dummy condition
-        .getMany();
+    const children = await instance.childrenQueryBuilder(parentCategory);
     context.body = children;
 }
 
@@ -78,15 +74,11 @@ export async function getParentTree(context: Context) {
     context.body = parentTree;
 }
 
-export async function parentQueryBuilder (context: Context) {
-    const manager = getManager();
-    const repository = await manager.getTreeRepository(Category);
+export async function parentQuery (context: Context) {
+    const instance = await new QueryBuilder();
     const childCategory: Category = context.request.body;
-    const parent = await repository
-        .createAncestorsQueryBuilder('category', 'categoryClosure', childCategory)
-        .andWhere('category.id >= 5') // dummy condition
-        .getMany();
-    context.body = parent;
+    const parents = await instance.parentQueryBuilder(childCategory);
+    context.body = parents;
 }
 
 export async function countParents(context: Context) {
@@ -98,43 +90,22 @@ export async function countParents(context: Context) {
 }
 
 // Be aware that a node is it's own child/parent
-export async function deleteChildrenQueryBuilder (context: Context) {
-    const manager = getManager();
-    const repository = await manager.getTreeRepository(Category);
-    const node: Category = context.params;
-    const operation = await repository
-        .createDescendantsQueryBuilder('category', 'closuretable', node) // Alias is what you are selecting --> category.
-        .where(`id_descendant = ${node.id}`)
-        .delete()
-        .from('category_closure')
-        .execute();
-    context.body = operation;
+export async function deleteChildren (context: Context) {
+    const instance = await new QueryBuilder();
+    const id = context.params.id;
+    const children = await instance.deleteChildren(id);
+    context.body = children;
 }
-// method 1 (first implementation from docs)
-export async function deleteNodeQueryBuilder (context: Context) {
-    const manager = getManager();
-    const repository = await manager.getTreeRepository(Category);
-    const node: Category = context.request.body;
-    const operation = await repository
-        .createQueryBuilder('category')
-        .where(`id_ancestor = ${node.id}`)
-        .delete()
-        .from('category_closure')
-        .execute();
-    context.body = operation;
-}
-// method 2
-// instance of QueryRepository, implementation by Shane Husson https://github.com/shusson
+
+// instance of QueryBuilder, modified implementation by Shane Husson https://github.com/shusson
 export async function deleteNode (context: Context) {
-    const instance = await new QueryRepository();
-        // get Manager to coonect to treeRepo and get descendants...
-    const manager = getManager();
-    const repository = await manager.getTreeRepository(Category);
+    const instance = await new QueryBuilder();
+        // get node descendants from treeRepo
+    const repository = getManager().getTreeRepository(Category);
     const node: Category = context.params;
-        // return children in context if you want to insert deleted data
-        // into the List entity from your front end.
     const children = await repository.findDescendants(node);
-        // return result of instance.delete in context if you want to get a report instead.
+        // send the deleted node/nodes if you want to handle them further
+        // save the result of instance.delete if you want to send a report instead.
     await instance.delete(`${node.id}`);
     context.body = children;
 }
