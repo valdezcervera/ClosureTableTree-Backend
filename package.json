@@ -41,7 +41,7 @@
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
     "pg": "^7.18.1",
-    "typeorm": "^0.2.0"
+    "typeorm": "^0.2.25"
   },
   "scripts": {
     "compile": "tsc && node src/index.js",
